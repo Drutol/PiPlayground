@@ -1,0 +1,6 @@
+c:\users\mordonus\documents\visual studio 2013\Projects\PiServerTest\PiServerTest\bin\Debug\PiServerTest.exe.config
+c:\users\mordonus\documents\visual studio 2013\Projects\PiServerTest\PiServerTest\obj\Debug\PiServerTest.csprojResolveAssemblyReference.cache
+C:\Users\Mordonus\documents\visual studio 2013\Projects\PiServerTest\PiServerTest\bin\Debug\PiServerTest.exe
+C:\Users\Mordonus\documents\visual studio 2013\Projects\PiServerTest\PiServerTest\bin\Debug\PiServerTest.pdb
+C:\Users\Mordonus\documents\visual studio 2013\Projects\PiServerTest\PiServerTest\obj\Debug\PiServerTest.exe
+C:\Users\Mordonus\documents\visual studio 2013\Projects\PiServerTest\PiServerTest\obj\Debug\PiServerTest.pdb
