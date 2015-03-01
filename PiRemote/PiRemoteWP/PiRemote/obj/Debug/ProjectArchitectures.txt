@@ -1,1 +1,1 @@
-c:\users\mordonus\documents\visual studio 2013\Projects\PiRemote\PiRemote\PiRemote.csproj;neutral
+C:\Users\Mordonus\documents\visual studio 2013\Projects\PiRemote\PiRemote\PiRemote.csproj;neutral

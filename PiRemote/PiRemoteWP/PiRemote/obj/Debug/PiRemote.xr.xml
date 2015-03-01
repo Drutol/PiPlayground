@@ -31,6 +31,7 @@
       <RootProperty Name="TextAlignment" />
       <RootProperty Name="RequestedTheme" />
       <RootProperty Name="Foreground" />
+      <RootProperty Name="LineHeight" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.TextBox">
       <RootProperty Name="HorizontalAlignment" />

@@ -27,7 +27,7 @@ namespace PiRemote
     public sealed partial class MainPage : Page
     {
         StreamSocket clientSocket = new StreamSocket();
-        HostName serverHost = new HostName("192.168.1.106");
+        HostName serverHost;
         public MainPage()
         {
             this.InitializeComponent();
@@ -53,9 +53,12 @@ namespace PiRemote
 
         private async void EstablishConnection(object sender, RoutedEventArgs e)
         {
+            serverHost = new HostName(IPBox.Text);
             try
             {
                 await clientSocket.ConnectAsync(serverHost, "9875");
+
+                
                 ConnectButton.IsEnabled = false;
                 SendStringButton.IsEnabled = true;
             }
@@ -66,6 +69,8 @@ namespace PiRemote
 
         }
 
+
+
         private async void SendString(string strData)
         {
             try
@@ -74,6 +79,30 @@ namespace PiRemote
                 IBuffer buffer = data.AsBuffer();
 
                 await clientSocket.OutputStream.WriteAsync(buffer);
+                readData();
+            }
+            catch (Exception exception)
+            {
+                if (SocketError.GetStatus(exception.HResult) == SocketErrorStatus.Unknown)
+                {
+                    StringBox.Text = exception.Message;
+                }
+
+            }
+          
+        }
+
+        private async void readData()
+        {
+            StatusLabel.Text = "Trying to receive data ...";
+            try
+            {
+                IBuffer buffer = new byte[1024].AsBuffer();
+                await clientSocket.InputStream.ReadAsync(buffer, buffer.Capacity, InputStreamOptions.Partial);
+                byte[] result = buffer.ToArray();
+                StatusLabel.Text = "Data received " + System.Text.Encoding.UTF8.GetString(result, 0, Convert.ToInt32(buffer.Length));
+            
+                
             }
             catch (Exception exception)
             {
@@ -82,6 +111,7 @@ namespace PiRemote
                     throw;
                 }
 
+                StatusLabel.Text = "Receive failed with error: " + exception.Message;
             }
         }
 
