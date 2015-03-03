@@ -1,29 +1,50 @@
 import socket
 import sys
+import _thread
 # Create a TCP/IP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Bind the socket to the address given on the command line
-HOST = socket.gethostbyname(socket.gethostname())   
+HOST = socket.gethostbyname(socket.gethostname())
 
 server_address = (socket.gethostname(), 9875)
-print(HOST)
-#print ('starting up on %s port %s' % server_address)
-#sock.bind(server_address)
+print("Starting listening service on", HOST)
 sock.bind((HOST, 9875))
-sock.listen(1)
-while True:
-    print ('waiting for a connection')
-    connection, client_address = sock.accept()
-    try:
-        print ('client connected:', client_address)
-        while True:
+sock.listen(10)
+
+
+
+# Threaded Method
+def get_requests(connection, address, ID):
+    print("Started new thread",ID)
+    while True:
+        try:
             data = connection.recv(512)
-            print ('received "%s"' % data.decode('ascii'))
-            if data:
-	      webbrowser.open_new_tab(data.decode('ascii'))
-                connection.sendall(bytes('Got It','utf-8'))
-            else:
-                break
-    finally:
-        connection.close()
+            print("Received message from ", address, "Thread: ", ID)
+            print("Message :", data.decode('ascii'))
+            strResult = process_message(data.decode('ascii'))
+            connection.sendall(bytes(strResult, "utf-8"))
+        finally:
+            print("Connection closed")
+            _thread.exit_thread()
+
+
+def process_message(strMsg):
+    print ("Processed msg", strMsg)
+    return "Done"
+
+
+def start_listening():
+    nThreadCounter = 1
+    while True:
+        print ('Waiting for a connection')
+        connection, client_address = sock.accept()
+        try:
+            _thread.start_new_thread( get_requests, (connection,client_address,nThreadCounter) )
+            nThreadCounter = nThreadCounter + 1
+        except:
+            print ("Error while creating thread")
+
+
+# Cycle
+start_listening()
