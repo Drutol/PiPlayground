@@ -3,9 +3,10 @@ import sys
 import dummy_thread as _thread
 import os
 import signal
-# Create a TCP/IP socket
+import pafy
 
 def clean_exit(signum, frame):
+    print 'Socket closed'
     socket.close()
     sys.exit(0)
 
@@ -14,15 +15,20 @@ def setup_socket(strIp,strPort):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     # Get Host
     HOST = socket.gethostbyname(socket.gethostname())
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.bind((strIp, int(strPort)))
     sock.listen(1)
     print 'Started socket on ' , strIp , ' : ' , strPort
     return sock
 
+def is_file_downloaded(strLink):
+    for link in tMusicDatabase:
+        if link == strLink:
+            return True
+    return False
+
 # Threaded Method
 def play_music(strFileName):
-	os.system("omxplayer out.mp3")
-	_thread.exit_thread()
 	return
 	
 
@@ -36,19 +42,31 @@ def get_requests(connection, address, ID):
             print("Message :", data.decode('utf-8'))
             if data.decode("utf-8") == "Close Connection":
                 print("Signal to close connection")
-                _thread.exit_thread()
+                return
 		
-	    strResult = process_message(data.decode('utf-8'))
-            connection.sendall(bytes(strResult))
+	    strResult = process_message(data.decode('utf-8'),connection)
+            #connection.sendall(bytes(strResult))
         except:
             print("Connection closed")
             return
 
 
-def process_message(strMsg):
-    print ("Processed msg", strMsg)
-    _thread.start_new_thread(play_music,("lolo",))
-    return "Done"
+def process_message(strMsg,conn):
+    print ("Processing msg", strMsg)
+    video = pafy.new(strMsg)
+    if video:
+        if is_file_downloaded(video.videoid):    
+            conn.sendall(bytes('File found now playing'))
+            os.system('omxplayer ' + video.videoid + '.m4a')
+        else:
+            audioStream = video.getbestaudio()
+            conn.sendall(bytes('File not found ,  now downloading ' + audioStream.get_filesize() + ' bytes'))
+            audioStream.download(video.videoid + '.m4a')
+            conn.sendall(bytes('File downloaded , now playing'))
+            tMusicDatabase.append(video.videoid)
+            os.system('omxplayer ' + video.videoid + '.m4a')
+    conn.sendall(bytes('Task Completed'))
+
 
 
 def start_listening(sock):
@@ -63,18 +81,28 @@ def start_listening(sock):
             print ("Error while creating thread")
 
 
-def read_database():
-    file = open('databse.txt','r')
-    if file:
-        for line in file:
-            tMusicDatabase.append(line)
+def build_database():
+    tFiles = get_filenames()
+    for strFile in tFiles:
+        if strFile.endswith('.m4a'):
+            tMusicDatabase.append(strFile[:-4])
+
+def get_filenames():
+    tNames = []
+    dirList=os.listdir(os.path.dirname(os.path.realpath(sys.argv[0])))
+    for fname in dirList:
+        tNames.append(fname)
+    return tNames
 
 
 
 
 # Cycle
 socket
-tMusicDatabase = {}
+
+tMusicDatabase = []
+build_database()
+
 #print 'Len' , len(sys.argv)
 #print 'Arg1' , sys.argv[0]
 #print 'Arg2' , sys.argv[1]
@@ -85,3 +113,4 @@ else:
 
 signal.signal(signal.SIGINT, clean_exit)
 start_listening(socket)
+socket.close()
