@@ -47,7 +47,6 @@ def get_requests(connection, address, ID):
 
 def process_message(strMsg):
     print ("Processed msg", strMsg)
-    os.system("omxplayer out.mp3")
     _thread.start_new_thread(play_music,("lolo",))
     return "Done"
 
