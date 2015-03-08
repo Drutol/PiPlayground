@@ -47,24 +47,27 @@ def get_requests(connection, address, ID):
 	    strResult = process_message(data.decode('utf-8'),connection)
             #connection.sendall(bytes(strResult))
         except:
-            print("Connection closed")
-            return
+           print("Connection closed")
+           return
 
 
 def process_message(strMsg,conn):
     print ("Processing msg", strMsg)
     video = pafy.new(strMsg)
     if video:
+        os.system('killall omxplayer.bin')
         if is_file_downloaded(video.videoid):    
             conn.sendall(bytes('File found now playing'))
-            os.system('omxplayer ' + video.videoid + '.m4a')
+            os.system('omxplayer --no-keys ' + video.videoid + '.m4a &')
         else:
             audioStream = video.getbestaudio()
-            conn.sendall(bytes('File not found ,  now downloading ' + audioStream.get_filesize() + ' bytes'))
+            conn.sendall(bytes('File not found ,  now downloading ' + str(audioStream.get_filesize()) + ' bytes'))
             audioStream.download(video.videoid + '.m4a')
             conn.sendall(bytes('File downloaded , now playing'))
             tMusicDatabase.append(video.videoid)
-            os.system('omxplayer ' + video.videoid + '.m4a')
+            os.system('omxplayer --no-keys ' + video.videoid + '.m4a &')
+    else:
+        return 'Invalid link'
     conn.sendall(bytes('Task Completed'))
 
 
