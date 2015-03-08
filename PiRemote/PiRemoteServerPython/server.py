@@ -47,6 +47,7 @@ def get_requests(connection, address, ID):
 	    strResult = process_message(data.decode('utf-8'),connection)
             #connection.sendall(bytes(strResult))
         except:
+           connection.close()
            print("Connection closed")
            return
 
@@ -58,14 +59,14 @@ def process_message(strMsg,conn):
         os.system('killall omxplayer.bin')
         if is_file_downloaded(video.videoid):    
             conn.sendall(bytes('File found now playing'))
-            os.system('omxplayer --no-keys ' + video.videoid + '.m4a &')
+            os.system('omxplayer --no-keys Music/' + video.videoid + '.m4a &')
         else:
             audioStream = video.getbestaudio()
             conn.sendall(bytes('File not found ,  now downloading ' + str(audioStream.get_filesize()) + ' bytes'))
-            audioStream.download(video.videoid + '.m4a')
+            audioStream.download('Music/' + video.videoid + '.m4a')
             conn.sendall(bytes('File downloaded , now playing'))
             tMusicDatabase.append(video.videoid)
-            os.system('omxplayer --no-keys ' + video.videoid + '.m4a &')
+            os.system('omxplayer --no-keys Music/' + video.videoid + '.m4a &')
     else:
         return 'Invalid link'
     conn.sendall(bytes('Task Completed'))
@@ -76,12 +77,14 @@ def start_listening(sock):
     nThreadCounter = 1
     while True:
         print ('Waiting for a connection')
-        connection, client_address = sock.accept()
         try:
+            connection, client_address = sock.accept()
             _thread.start_new_thread( get_requests, (connection,client_address,nThreadCounter) )
             nThreadCounter = nThreadCounter + 1
         except:
+            sock.close()
             print ("Error while creating thread")
+            break
 
 
 def build_database():
@@ -92,7 +95,7 @@ def build_database():
 
 def get_filenames():
     tNames = []
-    dirList=os.listdir(os.path.dirname(os.path.realpath(sys.argv[0])))
+    dirList=os.listdir(os.path.dirname(os.path.realpath(sys.argv[0]))+'/Music')
     for fname in dirList:
         tNames.append(fname)
     return tNames
