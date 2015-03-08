@@ -26,10 +26,6 @@ def is_file_downloaded(strLink):
         if link == strLink:
             return True
     return False
-
-# Threaded Method
-def play_music(strFileName):
-	return
 	
 
 # Threaded Method
@@ -44,8 +40,7 @@ def get_requests(connection, address, ID):
                 print("Signal to close connection")
                 return
 		
-	    strResult = process_message(data.decode('utf-8'),connection)
-            #connection.sendall(bytes(strResult))
+	    process_message(data.decode('utf-8'),connection)
         except:
            connection.close()
            print("Connection closed")
@@ -68,7 +63,7 @@ def process_message(strMsg,conn):
             tMusicDatabase.append(video.videoid)
             os.system('omxplayer --no-keys Music/' + video.videoid + '.m4a &')
     else:
-        return 'Invalid link'
+        conn.sendall(bytes('Invalid link'))
     conn.sendall(bytes('Task Completed'))
 
 
