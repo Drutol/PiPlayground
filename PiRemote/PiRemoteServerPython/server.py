@@ -32,39 +32,67 @@ def is_file_downloaded(strLink):
 def get_requests(connection, address, ID):
     print("Started new thread",ID)
     while True:
-        try:
+       try:
             data = connection.recv(512)
             print("Received message from ", address, "Thread: ", ID)
             print("Message :", data.decode('utf-8'))
             if data.decode("utf-8") == "Close Connection":
                 print("Signal to close connection")
-                return
-		
+                return		
 	    process_message(data.decode('utf-8'),connection)
-        except:
+       except:
            connection.close()
            print("Connection closed")
            return
 
 
+callbackConnetion = None
+# Dl Callback function
+def download_callback(total, recvd, ratio, rate, eta):
+    if int(total)/4 == int(recvd)or int(total)/2 == int(recvd):
+        if callbackConnection:
+            callbackConnection.sendall(bytes('DL ETA: ' + str(eta)))
+
+
 def process_message(strMsg,conn):
     print ("Processing msg", strMsg)
-    video = pafy.new(strMsg)
+    if strMsg == "Play" and strPreviousTrack != None:
+        os.system('killall oxmplayer.bin')
+        os.system('omxplayer --no-keys Music/' + strPreviousTrack + '.m4a &')
+        conn.sendall(bytes('Now playing'))
+        return
+    elif strMsg == 'Play' and strPreviousTrack is None:
+        conn.sendall(bytes('No track to play'))
+        return     
+
+    if strMsg == 'Pause':
+        os.system('killall omxplayer.bin')
+        conn.sendall(bytes('Playback stopped'))
+        return
+   
+    video = None
+    try:    
+        video = pafy.new(strMsg)
+    except:
+        conn.sendall(bytes('Invalid Link'))
+        return
+
     if video:
         os.system('killall omxplayer.bin')
         if is_file_downloaded(video.videoid):    
             conn.sendall(bytes('File found now playing'))
             os.system('omxplayer --no-keys Music/' + video.videoid + '.m4a &')
+            strPreviousTrack = video.videoid
         else:
             audioStream = video.getbestaudio()
             conn.sendall(bytes('File not found ,  now downloading ' + str(audioStream.get_filesize()) + ' bytes'))
-            audioStream.download('Music/' + video.videoid + '.m4a')
+            callbackConnection = conn
+            audioStream.download('Music/' + video.videoid + '.m4a',callback = download_callback)
+            callbackConnection = None
             conn.sendall(bytes('File downloaded , now playing'))
             tMusicDatabase.append(video.videoid)
             os.system('omxplayer --no-keys Music/' + video.videoid + '.m4a &')
-    else:
-        conn.sendall(bytes('Invalid link'))
-    conn.sendall(bytes('Task Completed'))
+            strPreviousTrack = video.videoid
 
 
 
@@ -103,7 +131,7 @@ socket
 
 tMusicDatabase = []
 build_database()
-
+strPreviousTrack = None
 #print 'Len' , len(sys.argv)
 #print 'Arg1' , sys.argv[0]
 #print 'Arg2' , sys.argv[1]
