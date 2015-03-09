@@ -6,26 +6,24 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource AutoSuggestBackgroundThemeBrush}">
 
     <Grid RequestedTheme="Dark">
 
-        <Image x:Name="PiLogo" HorizontalAlignment="Left" Height="100" Margin="306,98,0,0" VerticalAlignment="Top" Width="84" Source="Assets/Raspberry_Pi_Logo_svg.png"/>
-        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Pi Remote" VerticalAlignment="Top" Height="74" Width="380" FontSize="72" TextAlignment="Center" RequestedTheme="Light">
-            <TextBlock.Foreground>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="Black" Offset="0.11"/>
-                    <GradientStop Color="#FFC3AAAA" Offset="1"/>
-                    <GradientStop Color="#FE640E0E" Offset="0.383"/>
-                </LinearGradientBrush>
-            </TextBlock.Foreground>
-        </TextBlock>
-        <TextBox x:Name="IPBox" HorizontalAlignment="Left" Margin="10,113,0,0" TextWrapping="Wrap" Text="192.168.1.104" VerticalAlignment="Top" Width="285" TextAlignment="Center"/>
-        <Button x:ConnectionId='1' x:Name="ConnectButton" Content="Connect" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Width="285"                             RequestedTheme="Light"/>
-        <Button x:ConnectionId='2' x:Name="SendStringButton" Content="Button" HorizontalAlignment="Left" Margin="10,301,0,0" VerticalAlignment="Top" Width="380"                         RequestedTheme="Light"/>
-        <TextBox x:Name="StringBox" HorizontalAlignment="Left" Margin="10,254,0,0" TextWrapping="Wrap" Text="--" VerticalAlignment="Top" Width="380" TextAlignment="Center" RequestedTheme="Light"/>
-        <TextBlock HorizontalAlignment="Left" Margin="92,215,0,0" TextWrapping="Wrap" Text="Text To Send" VerticalAlignment="Top" Height="34" Width="225" FontSize="36" TextAlignment="Center" RequestedTheme="Light"/>
-        <TextBlock x:Name="StatusLabel" HorizontalAlignment="Left" Margin="10,588,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="42" Width="380" FontSize="24" Text="Status" TextAlignment="Center" LineHeight="6" RequestedTheme="Light"/>
+        <Image x:Name="PiLogo" HorizontalAlignment="Left" Height="100" Margin="10,13,0,0" VerticalAlignment="Top" Width="84" Source="Assets/Raspberry_Pi_Logo.png" Stretch="Fill"/>
+        <TextBox x:Name="IPBox" HorizontalAlignment="Left" Margin="0,113,0,0" TextWrapping="Wrap" Text="192.168.1.109" VerticalAlignment="Top" Width="272" TextAlignment="Center" FontSize="24"/>
+        <Button x:ConnectionId='1' x:Name="ConnectButton" Content="Connect" HorizontalAlignment="Left" Margin="10,162,0,0" VerticalAlignment="Top" Width="233"                             RequestedTheme="Light"/>
+        <Button x:ConnectionId='2' x:Name="SendStringButton" Content="Send Request" HorizontalAlignment="Left" Margin="10,377,0,0" VerticalAlignment="Top" Width="378"                         RequestedTheme="Light"/>
+        <TextBox x:Name="StringBox" HorizontalAlignment="Left" Margin="10,254,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="380" TextAlignment="Center" RequestedTheme="Light" Height="97" AcceptsReturn="True"/>
+        <TextBlock HorizontalAlignment="Left" Margin="92,215,0,0" TextWrapping="Wrap" Text="YouTube Link" VerticalAlignment="Top" Height="34" Width="225" FontSize="36" TextAlignment="Center" RequestedTheme="Light"/>
+        <TextBox x:Name="PortBox" HorizontalAlignment="Left" Margin="289,113,0,0" TextWrapping="Wrap" Text="9875" VerticalAlignment="Top" Width="101" TextAlignment="Center" Height="39" FontSize="24" RenderTransformOrigin="0.206,0.491"/>
+        <TextBlock x:Name="Title" HorizontalAlignment="Left" Margin="99,41,0,0" TextWrapping="Wrap" Text="PiRemote" VerticalAlignment="Top" Height="53" Width="289" Foreground="#FF742929" FontSize="48" FontWeight="Bold" TextAlignment="Center"/>
+        <Button x:ConnectionId='3' x:Name="Disconnect" Content="Disconnect" HorizontalAlignment="Left" Margin="265,161,0,0" VerticalAlignment="Top" Width="120"                           RequestedTheme="Light"/>
+        <CheckBox Content="Playlist" HorizontalAlignment="Left" Margin="10,339,0,0" VerticalAlignment="Top" Foreground="Black" RequestedTheme="Light" Width="84"/>
+        <TextBlock x:Name="StatusLabel" HorizontalAlignment="Left" Margin="10,537,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="93" Width="380" Foreground="Black" RequestedTheme="Light" TextAlignment="Center" LineHeight="9" SelectionHighlightColor="White" FontSize="20" Text="LOLOLO"/>
+        <TextBox HorizontalAlignment="Left" Margin="10,488,0,0" TextWrapping="Wrap" Text="Status" VerticalAlignment="Top" Width="380" TextAlignment="Center"/>
+        <Button x:ConnectionId='4' x:Name="ButtonPause" Content="Pause" HorizontalAlignment="Left" Margin="10,421,0,0" VerticalAlignment="Top" Width="182"                         RequestedTheme="Light"                            />
+        <Button x:ConnectionId='5' x:Name="ButtonPlay" Content="Play" HorizontalAlignment="Left" Margin="210,421,0,0" VerticalAlignment="Top" Width="178"                         RequestedTheme="Light"                           />
     </Grid>
 </Page>
 
