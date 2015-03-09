@@ -8,22 +8,48 @@
     mc:Ignorable="d"
     Background="{ThemeResource AutoSuggestBackgroundThemeBrush}">
 
+
+
     <Grid RequestedTheme="Dark">
 
-        <Image x:Name="PiLogo" HorizontalAlignment="Left" Height="100" Margin="10,13,0,0" VerticalAlignment="Top" Width="84" Source="Assets/Raspberry_Pi_Logo.png" Stretch="Fill"/>
-        <TextBox x:Name="IPBox" HorizontalAlignment="Left" Margin="0,113,0,0" TextWrapping="Wrap" Text="192.168.1.109" VerticalAlignment="Top" Width="272" TextAlignment="Center" FontSize="24"/>
-        <Button x:ConnectionId='1' x:Name="ConnectButton" Content="Connect" HorizontalAlignment="Left" Margin="10,162,0,0" VerticalAlignment="Top" Width="233"                             RequestedTheme="Light"/>
-        <Button x:ConnectionId='2' x:Name="SendStringButton" Content="Send Request" HorizontalAlignment="Left" Margin="10,377,0,0" VerticalAlignment="Top" Width="378"                         RequestedTheme="Light"/>
-        <TextBox x:Name="StringBox" HorizontalAlignment="Left" Margin="10,254,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="380" TextAlignment="Center" RequestedTheme="Light" Height="97" AcceptsReturn="True"/>
-        <TextBlock HorizontalAlignment="Left" Margin="92,215,0,0" TextWrapping="Wrap" Text="YouTube Link" VerticalAlignment="Top" Height="34" Width="225" FontSize="36" TextAlignment="Center" RequestedTheme="Light"/>
-        <TextBox x:Name="PortBox" HorizontalAlignment="Left" Margin="289,113,0,0" TextWrapping="Wrap" Text="9875" VerticalAlignment="Top" Width="101" TextAlignment="Center" Height="39" FontSize="24" RenderTransformOrigin="0.206,0.491"/>
-        <TextBlock x:Name="Title" HorizontalAlignment="Left" Margin="99,41,0,0" TextWrapping="Wrap" Text="PiRemote" VerticalAlignment="Top" Height="53" Width="289" Foreground="#FF742929" FontSize="48" FontWeight="Bold" TextAlignment="Center"/>
-        <Button x:ConnectionId='3' x:Name="Disconnect" Content="Disconnect" HorizontalAlignment="Left" Margin="265,161,0,0" VerticalAlignment="Top" Width="120"                           RequestedTheme="Light"/>
-        <CheckBox Content="Playlist" HorizontalAlignment="Left" Margin="10,339,0,0" VerticalAlignment="Top" Foreground="Black" RequestedTheme="Light" Width="84"/>
-        <TextBlock x:Name="StatusLabel" HorizontalAlignment="Left" Margin="10,537,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="93" Width="380" Foreground="Black" RequestedTheme="Light" TextAlignment="Center" LineHeight="9" SelectionHighlightColor="White" FontSize="20" Text="LOLOLO"/>
-        <TextBox HorizontalAlignment="Left" Margin="10,488,0,0" TextWrapping="Wrap" Text="Status" VerticalAlignment="Top" Width="380" TextAlignment="Center"/>
-        <Button x:ConnectionId='4' x:Name="ButtonPause" Content="Pause" HorizontalAlignment="Left" Margin="10,421,0,0" VerticalAlignment="Top" Width="182"                         RequestedTheme="Light"                            />
-        <Button x:ConnectionId='5' x:Name="ButtonPlay" Content="Play" HorizontalAlignment="Left" Margin="210,421,0,0" VerticalAlignment="Top" Width="178"                         RequestedTheme="Light"                           />
+        <Image x:Name="PiLogo" HorizontalAlignment="Left" Height="107" Margin="17,-8,0,0" VerticalAlignment="Top" Width="87" Source="Assets/Raspberry_Pi_Logo.png" Stretch="Fill"/>
+        <TextBlock x:Name="Title" HorizontalAlignment="Left" Margin="109,31,0,0" TextWrapping="Wrap" Text="PiRemote" VerticalAlignment="Top" Height="53" Width="281" Foreground="#FF742929" FontSize="48" FontWeight="Bold" TextAlignment="Center"/>
+
+
+        <Pivot Title="" Foreground="Black" Margin="0,126,0,24" Background="White">
+
+
+            <!--<Pivot.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" Foreground="Black" FontSize="30" TextAlignment="Center" Width="188" />
+                </DataTemplate>
+            </Pivot.HeaderTemplate>-->
+            <PivotItem Margin="0,-79,0,-21.667" Foreground="White" FontSize="20" RequestedTheme="Light" Background="{x:Null}" Header="Main      ">
+
+                <Grid HorizontalAlignment="Left" Height="645" Margin="10,10,0,0" VerticalAlignment="Top" Width="380">
+
+                    <TextBox x:Name="IPBox" HorizontalAlignment="Left" Margin="0,75,0,0" TextWrapping="Wrap" Text="192.168.1.109" VerticalAlignment="Top" Width="233" TextAlignment="Center" FontSize="24"/>
+                    <Button x:ConnectionId='1' x:Name="ConnectButton" Content="Connect" HorizontalAlignment="Left" Margin="0,109,0,0" VerticalAlignment="Top" Width="233"                             RequestedTheme="Light"/>
+                    <Button x:ConnectionId='2' x:Name="SendStringButton" Content="Send Request" HorizontalAlignment="Left" Margin="0,319,0,0" VerticalAlignment="Top" Width="370"                         RequestedTheme="Light"/>
+                    <TextBox x:Name="StringBox" HorizontalAlignment="Left" Margin="0,196,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="380" TextAlignment="Center" RequestedTheme="Light" Height="97" AcceptsReturn="True"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="75,162,0,0" TextWrapping="Wrap" Text="YouTube Link" VerticalAlignment="Top" Height="34" Width="225" FontSize="36" TextAlignment="Center" RequestedTheme="Light" Foreground="Black"/>
+                    <TextBox x:Name="PortBox" HorizontalAlignment="Left" Margin="257,75,0,0" TextWrapping="Wrap" Text="9875" VerticalAlignment="Top" Width="101" TextAlignment="Center" Height="39" FontSize="24" RenderTransformOrigin="0.206,0.491"/>
+
+                    <Button x:ConnectionId='3' x:Name="Disconnect" Content="Disconnect" HorizontalAlignment="Left" Margin="238,109,0,0" VerticalAlignment="Top" Width="120"                           RequestedTheme="Light"/>
+                    <CheckBox Content="Playlist" HorizontalAlignment="Left" Margin="0,281,0,0" VerticalAlignment="Top" Foreground="Black" RequestedTheme="Light" Width="84"/>
+                    <TextBlock x:Name="StatusLabel" HorizontalAlignment="Left" Margin="0,460,0,0" TextWrapping="Wrap" Width="380" Foreground="Black" RequestedTheme="Light" TextAlignment="Center" LineHeight="9" SelectionHighlightColor="White" FontSize="20" Text="--" Height="60" VerticalAlignment="Top"/>
+                    <TextBox HorizontalAlignment="Left" Margin="0,416,0,0" TextWrapping="Wrap" Text="Status" VerticalAlignment="Top" Width="380" TextAlignment="Center" Background="White"/>
+                    <Button x:ConnectionId='4' x:Name="ButtonPause" Content="Pause" HorizontalAlignment="Left" Margin="0,363,0,0" VerticalAlignment="Top" Width="182"                         RequestedTheme="Light"                            />
+                    <Button x:ConnectionId='5' x:Name="ButtonPlay" Content="Play" HorizontalAlignment="Left" Margin="192,363,0,0" VerticalAlignment="Top" Width="178"                         RequestedTheme="Light"                           />
+                </Grid>
+            </PivotItem>
+            <PivotItem Header="Available Music List">
+                <Grid Margin="0,0,-0.333,0">
+                    <TextBox HorizontalAlignment="Left" Margin="138,226,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"/>
+
+                </Grid>
+            </PivotItem>
+        </Pivot>
     </Grid>
 </Page>
 

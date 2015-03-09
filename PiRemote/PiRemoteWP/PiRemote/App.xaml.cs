@@ -127,5 +127,10 @@ namespace PiRemote
             // TODO: Save application state and stop any background activity
             deferral.Complete();
         }
+
+        /// <summary>
+        /// Invoked when the application is activated as the target of a sharing operation.
+        /// </summary>
+        /// <param name="e">Details about the activation request.</param>
     }
 }
