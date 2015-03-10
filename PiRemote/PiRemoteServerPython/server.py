@@ -4,6 +4,7 @@ import dummy_thread as _thread
 import os
 import signal
 import pafy
+import random
 
 def clean_exit(signum, frame):
     print 'Socket closed'
@@ -70,6 +71,19 @@ def process_message(strMsg,conn):
         conn.sendall(bytes('Playback stopped'))
         return
    
+    if strMsg == 'random':
+        os.system('killall omxplayer.bin')
+        os.system('omxplayer --no-keys Music/' + random.choice(tMusicDatabase) + '.m4a &')
+        return
+  
+    if strMsg == 'GimmeLinks':
+        strLinks = 'Links;'
+        for link in tMusicDatabase:
+            strLinks = strLinks + link + ';'
+        conn.sendall(bytes(strLinks))
+        return
+
+
     video = None
     try:    
         video = pafy.new(strMsg)
