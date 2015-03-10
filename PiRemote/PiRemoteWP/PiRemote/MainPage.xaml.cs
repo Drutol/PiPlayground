@@ -36,7 +36,10 @@ namespace PiRemote
             this.InitializeComponent();
 
             this.NavigationCacheMode = NavigationCacheMode.Required;
+            LinkList.SelectionChanged += LinkList_SelectionChanged;
         }
+
+
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -84,11 +87,20 @@ namespace PiRemote
         {
              try
              {
-                    IBuffer buffer = new byte[1024].AsBuffer();
-                    await clientSocket.InputStream.ReadAsync(buffer, buffer.Capacity, InputStreamOptions.Partial);
-                    byte[] result = buffer.ToArray();
-                    StatusLabel.Text = System.Text.Encoding.UTF8.GetString(result, 0, Convert.ToInt32(buffer.Length));
-                    readData();
+                IBuffer buffer = new byte[1024].AsBuffer();
+                await clientSocket.InputStream.ReadAsync(buffer, buffer.Capacity, InputStreamOptions.Partial);
+                byte[] result = buffer.ToArray();
+                string strReturn = System.Text.Encoding.UTF8.GetString(result, 0, Convert.ToInt32(buffer.Length));
+                if(!strReturn.Contains("Links"))
+                {
+                    StatusLabel.Text = strReturn;
+                }
+                else
+                {
+                    ProcessLinks(strReturn);
+                }
+
+                readData();
              }
             catch (Exception exception)
             {
@@ -124,6 +136,37 @@ namespace PiRemote
         private void ButtonPlay_Tapped(object sender, TappedRoutedEventArgs e)
         {
             SendString("Play");
+        }
+
+        private void ButtonFetchLinks_Click(object sender, RoutedEventArgs e)
+        {
+            SendString("GimmeLinks");
+        }
+
+        private void ProcessLinks(string strLinks)
+        {
+            LinkList.Items.Clear();
+            string[] words = strLinks.Split(';');
+            foreach (string word in words)
+            {
+                if(word != "Links")
+                {
+                    LinkList.Items.Add(word);
+                }
+            }
+
+
+
+        }
+
+        private void PickTrackAtRandom(object sender, RoutedEventArgs e)
+        {
+            SendString("random");
+        }
+
+        void LinkList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SendString(LinkList.SelectedItem.ToString());
         }
    
     }

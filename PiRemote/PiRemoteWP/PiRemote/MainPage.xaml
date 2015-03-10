@@ -12,8 +12,8 @@
 
     <Grid RequestedTheme="Dark">
 
-        <Image x:Name="PiLogo" HorizontalAlignment="Left" Height="107" Margin="17,-8,0,0" VerticalAlignment="Top" Width="87" Source="Assets/Raspberry_Pi_Logo.png" Stretch="Fill"/>
-        <TextBlock x:Name="Title" HorizontalAlignment="Left" Margin="109,31,0,0" TextWrapping="Wrap" Text="PiRemote" VerticalAlignment="Top" Height="53" Width="281" Foreground="#FF742929" FontSize="48" FontWeight="Bold" TextAlignment="Center"/>
+        <Image x:Name="PiLogo" HorizontalAlignment="Left" Height="107" Margin="17,-10,0,0" VerticalAlignment="Top" Width="87" Source="Assets/Raspberry_Pi_Logo.png" Stretch="Fill"/>
+        <TextBlock x:Name="Title" HorizontalAlignment="Left" Margin="109,29,0,0" TextWrapping="Wrap" Text="PiRemote" VerticalAlignment="Top" Height="53" Width="281" Foreground="#FF742929" FontSize="48" FontWeight="Bold" TextAlignment="Center"/>
 
 
         <Pivot Title="" Foreground="Black" Margin="0,126,0,24" Background="White">
@@ -30,23 +30,41 @@
 
                     <TextBox x:Name="IPBox" HorizontalAlignment="Left" Margin="0,75,0,0" TextWrapping="Wrap" Text="192.168.1.109" VerticalAlignment="Top" Width="233" TextAlignment="Center" FontSize="24"/>
                     <Button x:Name="ConnectButton" Content="Connect" HorizontalAlignment="Left" Margin="0,109,0,0" VerticalAlignment="Top" Width="233" Click="EstablishConnection" RequestedTheme="Light"/>
-                    <Button x:Name="SendStringButton" Content="Send Request" HorizontalAlignment="Left" Margin="0,319,0,0" VerticalAlignment="Top" Width="370" Click="SendStringClick" RequestedTheme="Light"/>
+                    <Button x:Name="ButtonRandom" Content="Random" HorizontalAlignment="Left" Margin="0,378,0,0" VerticalAlignment="Top" Width="182" Click="PickTrackAtRandom" RequestedTheme="Light" Height="33"/>
+                    <Button x:Name="SendStringButton" Content="Send Request" HorizontalAlignment="Left" Margin="126,290,0,0" VerticalAlignment="Top" Width="244" Click="SendStringClick" RequestedTheme="Light"/>
                     <TextBox x:Name="StringBox" HorizontalAlignment="Left" Margin="0,196,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="380" TextAlignment="Center" RequestedTheme="Light" Height="97" AcceptsReturn="True"/>
                     <TextBlock HorizontalAlignment="Left" Margin="75,162,0,0" TextWrapping="Wrap" Text="YouTube Link" VerticalAlignment="Top" Height="34" Width="225" FontSize="36" TextAlignment="Center" RequestedTheme="Light" Foreground="Black"/>
                     <TextBox x:Name="PortBox" HorizontalAlignment="Left" Margin="257,75,0,0" TextWrapping="Wrap" Text="9875" VerticalAlignment="Top" Width="101" TextAlignment="Center" Height="39" FontSize="24" RenderTransformOrigin="0.206,0.491"/>
 
                     <Button x:Name="Disconnect" Content="Disconnect" HorizontalAlignment="Left" Margin="238,109,0,0" VerticalAlignment="Top" Width="120" Click="DisposeConnection" RequestedTheme="Light"/>
                     <CheckBox Content="Playlist" HorizontalAlignment="Left" Margin="0,281,0,0" VerticalAlignment="Top" Foreground="Black" RequestedTheme="Light" Width="84"/>
-                    <TextBlock x:Name="StatusLabel" HorizontalAlignment="Left" Margin="0,460,0,0" TextWrapping="Wrap" Width="380" Foreground="Black" RequestedTheme="Light" TextAlignment="Center" LineHeight="9" SelectionHighlightColor="White" FontSize="20" Text="--" Height="60" VerticalAlignment="Top"/>
-                    <TextBox HorizontalAlignment="Left" Margin="0,416,0,0" TextWrapping="Wrap" Text="Status" VerticalAlignment="Top" Width="380" TextAlignment="Center" Background="White"/>
-                    <Button x:Name="ButtonPause" Content="Pause" HorizontalAlignment="Left" Margin="0,363,0,0" VerticalAlignment="Top" Width="182" Click="SendStringClick" RequestedTheme="Light" Tapped="ButtonPause_Tapped"/>
-                    <Button x:Name="ButtonPlay" Content="Play" HorizontalAlignment="Left" Margin="192,363,0,0" VerticalAlignment="Top" Width="178" Click="SendStringClick" RequestedTheme="Light" Tapped="ButtonPlay_Tapped"/>
+                    <TextBlock x:Name="StatusLabel" HorizontalAlignment="Left" Margin="0,456,0,0" TextWrapping="Wrap" Width="380" Foreground="Black" RequestedTheme="Light" TextAlignment="Center" LineHeight="9" SelectionHighlightColor="White" FontSize="20" Text="--" Height="34" VerticalAlignment="Top"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="0,427,0,0" TextWrapping="Wrap" Text="Status" VerticalAlignment="Top" Width="380" TextAlignment="Center" Foreground="Black"></TextBlock>
+                    <Button x:Name="ButtonPause" Content="Pause" HorizontalAlignment="Left" Margin="0,334,0,0" VerticalAlignment="Top" Width="182" Click="SendStringClick" RequestedTheme="Light" Tapped="ButtonPause_Tapped"/>
+                    <Button x:Name="ButtonPlay" Content="Play" HorizontalAlignment="Left" Margin="192,334,0,0" VerticalAlignment="Top" Width="178" Click="SendStringClick" RequestedTheme="Light" Tapped="ButtonPlay_Tapped"/>
                 </Grid>
             </PivotItem>
             <PivotItem Header="Available Music List">
-                <Grid Margin="0,0,-0.333,0">
-                    <TextBox HorizontalAlignment="Left" Margin="138,226,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"/>
+                <Grid>
+                    <ListView x:Name="LinkList" HorizontalAlignment="Left" Height="307" Margin="10,63,0,0" VerticalAlignment="Top" Width="342" BorderBrush="Black" Background="#FFE4E4E4" BorderThickness="1">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                                <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                            </Style>
+                        </ListView.ItemContainerStyle>
 
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderThickness="0,0,0,3" BorderBrush="Azure">
+                                    <Grid>
+                                        <TextBlock VerticalAlignment="Center" FontSize="20" Grid.Column="0" Foreground="Black" Text="{Binding}"></TextBlock>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <Button x:Name="ButtonFetchLinks" Content="Fetch" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Height="9" RequestedTheme="Light" Click="ButtonFetchLinks_Click"/>
                 </Grid>
             </PivotItem>
         </Pivot>
