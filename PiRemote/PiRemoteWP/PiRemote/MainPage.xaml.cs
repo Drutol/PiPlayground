@@ -12,18 +12,21 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-
 using Windows.Networking.Sockets;
 using Windows.Networking;
 using Windows.Storage.Streams;
 using System.Text;
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
+using Windows.UI.Core;
+using System.Threading;
+using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.DataTransfer;
+using Windows.ApplicationModel.DataTransfer.ShareTarget;
+using Windows.UI.Popups;
+using System.Threading;
+
 
 namespace PiRemote
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MainPage : Page
     {
         StreamSocket clientSocket = new StreamSocket();
@@ -33,22 +36,15 @@ namespace PiRemote
             this.InitializeComponent();
 
             this.NavigationCacheMode = NavigationCacheMode.Required;
+            LinkList.SelectionChanged += LinkList_SelectionChanged;
         }
 
-        /// <summary>
-        /// Invoked when this page is about to be displayed in a Frame.
-        /// </summary>
-        /// <param name="e">Event data that describes how this page was reached.
-        /// This parameter is typically used to configure the page.</param>
+
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            // TODO: Prepare page for display here.
-
-            // TODO: If your application contains multiple pages, ensure that you are
-            // handling the hardware Back button by registering for the
-            // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
-            // If you are using the NavigationHelper provided by some templates,
-            // this event is handled for you.
+            SendStringButton.IsEnabled = false;
+            Disconnect.IsEnabled = false;
         }
 
         private async void EstablishConnection(object sender, RoutedEventArgs e)
@@ -56,30 +52,25 @@ namespace PiRemote
             serverHost = new HostName(IPBox.Text);
             try
             {
-                await clientSocket.ConnectAsync(serverHost, "9875");
-
-                
+                await clientSocket.ConnectAsync(serverHost, PortBox.Text);
                 ConnectButton.IsEnabled = false;
                 SendStringButton.IsEnabled = true;
+                Disconnect.IsEnabled = true;
+                readData();
             }
-            catch(Exception ex)
-            {
-            }
-          
-
+            catch (Exception) { }
         }
 
 
 
-        private async void SendString(string strData)
+        private async void SendString(string strData,bool getResponse = true)
         {
             try
             {
-                byte[] data = Encoding.Unicode.GetBytes(strData);
+                byte[] data = Encoding.UTF8.GetBytes(strData);
                 IBuffer buffer = data.AsBuffer();
 
                 await clientSocket.OutputStream.WriteAsync(buffer);
-                readData();
             }
             catch (Exception exception)
             {
@@ -94,16 +85,23 @@ namespace PiRemote
 
         private async void readData()
         {
-            StatusLabel.Text = "Trying to receive data ...";
-            try
-            {
+             try
+             {
                 IBuffer buffer = new byte[1024].AsBuffer();
                 await clientSocket.InputStream.ReadAsync(buffer, buffer.Capacity, InputStreamOptions.Partial);
                 byte[] result = buffer.ToArray();
-                StatusLabel.Text = "Data received " + System.Text.Encoding.UTF8.GetString(result, 0, Convert.ToInt32(buffer.Length));
-            
-                
-            }
+                string strReturn = System.Text.Encoding.UTF8.GetString(result, 0, Convert.ToInt32(buffer.Length));
+                if(!strReturn.Contains("Links"))
+                {
+                    StatusLabel.Text = strReturn;
+                }
+                else
+                {
+                    ProcessLinks(strReturn);
+                }
+
+                readData();
+             }
             catch (Exception exception)
             {
                 if (SocketError.GetStatus(exception.HResult) == SocketErrorStatus.Unknown)
@@ -119,5 +117,57 @@ namespace PiRemote
         {
             SendString(StringBox.Text);
         }
+
+        private void DisposeConnection(object sender, RoutedEventArgs e)
+        {
+            SendString("Close Connection",false);
+            clientSocket.Dispose();
+            clientSocket = new StreamSocket();
+            ConnectButton.IsEnabled = true;
+            Disconnect.IsEnabled = false;
+            SendStringButton.IsEnabled = false;
+        }
+
+        private void ButtonPause_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            SendString("Pause");
+        }
+
+        private void ButtonPlay_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            SendString("Play");
+        }
+
+        private void ButtonFetchLinks_Click(object sender, RoutedEventArgs e)
+        {
+            SendString("GimmeLinks");
+        }
+
+        private void ProcessLinks(string strLinks)
+        {
+            LinkList.Items.Clear();
+            string[] words = strLinks.Split(';');
+            foreach (string word in words)
+            {
+                if(word != "Links")
+                {
+                    LinkList.Items.Add(word);
+                }
+            }
+
+
+
+        }
+
+        private void PickTrackAtRandom(object sender, RoutedEventArgs e)
+        {
+            SendString("random");
+        }
+
+        void LinkList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SendString(LinkList.SelectedItem.ToString());
+        }
+   
     }
 }

@@ -529,6 +529,3 @@ namespace PiRemote.PiRemote_XamlTypeInfo
 }
 
 
-
-
-

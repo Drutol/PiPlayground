@@ -4,5 +4,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:PiRemote">
 
+    <Application.Resources>
+        <SolidColorBrush x:Key="PivotHeaderForegroundSelectedBrush" Color="Black" />
+        <SolidColorBrush x:Key="PivotHeaderForegroundUnselectedBrush" Color="Gray" />
+        <x:Double x:Key="PivotHeaderItemFontSize">30</x:Double>
+    </Application.Resources>
+
 </Application>
 

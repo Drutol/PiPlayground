@@ -23,12 +23,15 @@
       <PackagePath>Assets\Logo.scale-240.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Mordonus\documents\visual studio 2013\Projects\PiRemote\PiRemote\Assets\logo744x360.png">
+      <PackagePath>Assets\logo744x360.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Mordonus\documents\visual studio 2013\Projects\PiRemote\PiRemote\Assets\Raspberry_Pi_Logo.png">
+      <PackagePath>Assets\Raspberry_Pi_Logo.png</PackagePath>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Mordonus\documents\visual studio 2013\Projects\PiRemote\PiRemote\Assets\SmallLogo.scale-240.png">
       <PackagePath>Assets\SmallLogo.scale-240.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-    </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Mordonus\documents\visual studio 2013\Projects\PiRemote\PiRemote\Assets\Raspberry_Pi_Logo_svg.png">
-      <PackagePath>Assets\Raspberry_Pi_Logo_svg.png</PackagePath>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Mordonus\documents\visual studio 2013\Projects\PiRemote\PiRemote\Assets\SplashScreen.scale-240.png">
       <PackagePath>Assets\SplashScreen.scale-240.png</PackagePath>
