@@ -5,6 +5,7 @@ import os
 import signal
 import pafy
 import random
+import time
 
 def clean_exit(signum, frame):
     print 'Socket closed'
@@ -79,7 +80,8 @@ def process_message(strMsg,conn):
     if strMsg == 'GimmeLinks':
         strLinks = 'Links;'
         for link in tMusicDatabase:
-            strLinks = strLinks + link + ';'
+            title = dTitleDatabase.get(link,'Title not available ' + link) 
+            strLinks = strLinks + link  + '|' + title + ';'
         conn.sendall(bytes(strLinks))
         return
 
@@ -137,6 +139,35 @@ def get_filenames():
         tNames.append(fname)
     return tNames
 
+def build_titledatabase():
+    file = None
+    try:
+        file = open("Music/TitleDB.txt",'r')
+        for line in file:
+            words = line.split('|')
+            if len(words) == 2:
+                dTitleDatabase[words[0]] = words[1]
+    except:
+        print 'Error reading file'
+
+    for link in tMusicDatabase:
+        if dTitleDatabase.get(link) == None:
+            print 'Getting title for ' , link
+            vid = pafy.new(link)
+            dTitleDatabase[link] = vid.title
+            time.sleep(0.1)
+   
+    if file != None:
+        file.close()
+    file = open("Music/TitleDB.txt","w")
+    
+    tKeys = dTitleDatabase.keys()
+    
+    for key in tKeys:
+        file.write(key + '|' + dTitleDatabase[key] + '\n')
+
+    print len(dTitleDatabase) , ' links in database'
+
 
 
 
@@ -144,7 +175,9 @@ def get_filenames():
 socket
 
 tMusicDatabase = []
+dTitleDatabase = {}
 build_database()
+build_titledatabase()
 strPreviousTrack = None
 #print 'Len' , len(sys.argv)
 #print 'Arg1' , sys.argv[0]
