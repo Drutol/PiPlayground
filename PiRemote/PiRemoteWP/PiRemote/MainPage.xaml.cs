@@ -31,6 +31,7 @@ namespace PiRemote
     {
         StreamSocket clientSocket = new StreamSocket();
         HostName serverHost;
+        Dictionary<string, string> MusicDatabase = new Dictionary<string, string>();
         public MainPage()
         {
             this.InitializeComponent();
@@ -146,12 +147,19 @@ namespace PiRemote
         private void ProcessLinks(string strLinks)
         {
             LinkList.Items.Clear();
+            MusicDatabase.Clear();
             string[] words = strLinks.Split(';');
             foreach (string word in words)
             {
-                if(word != "Links")
+                if(!word.Contains("Links"))
                 {
-                    LinkList.Items.Add(word);
+                    string[] linkData = word.Split('|');
+                    if (linkData.Length == 2)
+                    {
+                        MusicDatabase.Add(linkData[1], linkData[0]);
+                        LinkList.Items.Add(linkData[1]);
+                    }
+
                 }
             }
 
@@ -166,7 +174,7 @@ namespace PiRemote
 
         void LinkList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            SendString(LinkList.SelectedItem.ToString());
+            SendString(MusicDatabase[LinkList.SelectedItem.ToString()]);
         }
    
     }
