@@ -22,7 +22,6 @@ using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.ApplicationModel.DataTransfer.ShareTarget;
 using Windows.UI.Popups;
-using System.Threading;
 
 
 namespace PiRemote
@@ -46,6 +45,9 @@ namespace PiRemote
         {
             SendStringButton.IsEnabled = false;
             Disconnect.IsEnabled = false;
+            Stop.IsEnabled = false;
+            Random.IsEnabled = false;
+            ButtonFetchLinks.IsEnabled = false;
         }
 
         private async void EstablishConnection(object sender, RoutedEventArgs e)
@@ -57,6 +59,9 @@ namespace PiRemote
                 ConnectButton.IsEnabled = false;
                 SendStringButton.IsEnabled = true;
                 Disconnect.IsEnabled = true;
+                Stop.IsEnabled = true;
+                Random.IsEnabled = true;
+                ButtonFetchLinks.IsEnabled = true;
                 readData();
             }
             catch (Exception) { }
@@ -88,7 +93,7 @@ namespace PiRemote
         {
              try
              {
-                IBuffer buffer = new byte[1024].AsBuffer();
+                IBuffer buffer = new byte[2048].AsBuffer();
                 await clientSocket.InputStream.ReadAsync(buffer, buffer.Capacity, InputStreamOptions.Partial);
                 byte[] result = buffer.ToArray();
                 string strReturn = System.Text.Encoding.UTF8.GetString(result, 0, Convert.ToInt32(buffer.Length));
@@ -167,14 +172,14 @@ namespace PiRemote
 
         }
 
-        private void PickTrackAtRandom(object sender, RoutedEventArgs e)
-        {
-            SendString("random");
-        }
-
         void LinkList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             SendString(MusicDatabase[LinkList.SelectedItem.ToString()]);
+        }
+
+        private void PickTrackAtRandom(object sender, TappedRoutedEventArgs e)
+        {
+            SendString("random");
         }
    
     }

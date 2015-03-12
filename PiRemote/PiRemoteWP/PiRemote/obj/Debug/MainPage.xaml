@@ -10,64 +10,63 @@
 
 
 
-    <Grid RequestedTheme="Dark">
+    <Grid RequestedTheme="Light" Margin="0,-16.667,0,-0.333">
 
         <Image x:Name="PiLogo" HorizontalAlignment="Left" Height="107" Margin="17,-10,0,0" VerticalAlignment="Top" Width="87" Source="Assets/Raspberry_Pi_Logo.png" Stretch="Fill"/>
         <TextBlock x:Name="Title" HorizontalAlignment="Left" Margin="109,29,0,0" TextWrapping="Wrap" Text="PiRemote" VerticalAlignment="Top" Height="53" Width="281" Foreground="#FF742929" FontSize="48" FontWeight="Bold" TextAlignment="Center"/>
 
 
-        <Pivot Title="" Foreground="Black" Margin="0,126,0,24" Background="White">
 
 
-            <!--<Pivot.HeaderTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding}" Foreground="Black" FontSize="30" TextAlignment="Center" Width="188" />
-                </DataTemplate>
-            </Pivot.HeaderTemplate>-->
-            <PivotItem Margin="0,-79,0,-21.667" Foreground="White" FontSize="20" RequestedTheme="Light" Background="{x:Null}" Header="Main      ">
+
+
+        <Pivot Title="" Foreground="Black" Margin="0,126,0,0" Background="White">
+            <PivotItem Margin="0,-79,0,92.5" Foreground="White" FontSize="20" RequestedTheme="Light" Background="{x:Null}" Header="Main      ">
 
                 <Grid HorizontalAlignment="Left" Height="645" Margin="10,10,0,0" VerticalAlignment="Top" Width="380">
 
-                    <TextBox x:Name="IPBox" HorizontalAlignment="Left" Margin="0,75,0,0" TextWrapping="Wrap" Text="192.168.1.109" VerticalAlignment="Top" Width="233" TextAlignment="Center" FontSize="24"/>
-                    <Button x:ConnectionId='2' x:Name="ConnectButton" Content="Connect" HorizontalAlignment="Left" Margin="0,109,0,0" VerticalAlignment="Top" Width="233"                             RequestedTheme="Light"/>
-                    <Button x:ConnectionId='3' x:Name="ButtonRandom" Content="Random" HorizontalAlignment="Left" Margin="0,378,0,0" VerticalAlignment="Top" Width="182"                           RequestedTheme="Light" Height="33"/>
-                    <Button x:ConnectionId='4' x:Name="SendStringButton" Content="Send Request" HorizontalAlignment="Left" Margin="126,290,0,0" VerticalAlignment="Top" Width="244"                         RequestedTheme="Light"/>
-                    <TextBox x:Name="StringBox" HorizontalAlignment="Left" Margin="0,196,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="380" TextAlignment="Center" RequestedTheme="Light" Height="97" AcceptsReturn="True"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="75,162,0,0" TextWrapping="Wrap" Text="YouTube Link" VerticalAlignment="Top" Height="34" Width="225" FontSize="36" TextAlignment="Center" RequestedTheme="Light" Foreground="Black"/>
-                    <TextBox x:Name="PortBox" HorizontalAlignment="Left" Margin="257,75,0,0" TextWrapping="Wrap" Text="9875" VerticalAlignment="Top" Width="101" TextAlignment="Center" Height="39" FontSize="24" RenderTransformOrigin="0.206,0.491"/>
+                    <TextBox x:Name="IPBox" HorizontalAlignment="Left" Margin="10,75,0,0" TextWrapping="Wrap" Text="192.168.1.109" VerticalAlignment="Top" Width="233" TextAlignment="Center" FontSize="24"/>
+                    <Button x:ConnectionId='4' x:Name="ConnectButton" Content="Connect" HorizontalAlignment="Left" Margin="10,109,0,0" VerticalAlignment="Top" Width="233"                             RequestedTheme="Light"/>
+                    <Button x:ConnectionId='5' x:Name="SendStringButton" Content="Send Request" HorizontalAlignment="Left" Margin="126,245,0,0" VerticalAlignment="Top" Width="244"                         RequestedTheme="Light"/>
+                    <TextBox x:Name="StringBox" HorizontalAlignment="Left" Margin="10,196,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="358" TextAlignment="Center" RequestedTheme="Light" Height="54" AcceptsReturn="True"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="78,162,0,0" TextWrapping="Wrap" Text="YouTube Link" VerticalAlignment="Top" Height="34" Width="225" FontSize="36" TextAlignment="Center" RequestedTheme="Light" Foreground="Black"/>
+                    <TextBox x:Name="PortBox" HorizontalAlignment="Left" Margin="248,75,0,0" TextWrapping="Wrap" Text="9875" VerticalAlignment="Top" Width="120" TextAlignment="Center" Height="39" FontSize="24" RenderTransformOrigin="0.206,0.491"/>
 
-                    <Button x:ConnectionId='5' x:Name="Disconnect" Content="Disconnect" HorizontalAlignment="Left" Margin="238,109,0,0" VerticalAlignment="Top" Width="120"                           RequestedTheme="Light"/>
-                    <CheckBox Content="Playlist" HorizontalAlignment="Left" Margin="0,281,0,0" VerticalAlignment="Top" Foreground="Black" RequestedTheme="Light" Width="84"/>
-                    <TextBlock x:Name="StatusLabel" HorizontalAlignment="Left" Margin="0,456,0,0" TextWrapping="Wrap" Width="380" Foreground="Black" RequestedTheme="Light" TextAlignment="Center" LineHeight="9" SelectionHighlightColor="White" FontSize="20" Text="--" Height="34" VerticalAlignment="Top"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="0,427,0,0" TextWrapping="Wrap" Text="Status" VerticalAlignment="Top" Width="380" TextAlignment="Center" Foreground="Black"></TextBlock>
-                    <Button x:ConnectionId='6' x:Name="ButtonPause" Content="Pause" HorizontalAlignment="Left" Margin="0,334,0,0" VerticalAlignment="Top" Width="182"                         RequestedTheme="Light"                            />
-                    <Button x:ConnectionId='7' x:Name="ButtonPlay" Content="Play" HorizontalAlignment="Left" Margin="192,334,0,0" VerticalAlignment="Top" Width="178"                         RequestedTheme="Light"                           />
+                    <Button x:ConnectionId='6' x:Name="Disconnect" Content="Disconnect" HorizontalAlignment="Left" Margin="248,109,0,0" VerticalAlignment="Top" Width="120"                           RequestedTheme="Light"/>
+                    <CheckBox Content="Playlist" HorizontalAlignment="Left" Margin="17,251,0,0" VerticalAlignment="Top" Foreground="Black" RequestedTheme="Light" Width="84"/>
                 </Grid>
             </PivotItem>
-            <PivotItem Header="Available Music List">
-                <Grid>
-                    <ListView x:Name="LinkList" HorizontalAlignment="Left" Height="307" Margin="10,63,0,0" VerticalAlignment="Top" Width="342" BorderBrush="Black" Background="#FFE4E4E4" BorderThickness="1">
+            <PivotItem Header="Available Music List" Margin="19,23,19,83.667">
+                <Grid Margin="0,0,-0.333,51">
+                    <ListView x:Name="LinkList" HorizontalAlignment="Left" Margin="10,63,0,-36" Width="342" BorderBrush="Black" Background="#FFE4E4E4" BorderThickness="1">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
-                                <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+                                <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
                             </Style>
                         </ListView.ItemContainerStyle>
 
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <Border BorderThickness="0,0,0,3" BorderBrush="Azure">
+                                <Border BorderThickness="0,0,0,3" BorderBrush="Goldenrod" HorizontalAlignment="Left">
                                     <Grid>
-                                        <TextBlock VerticalAlignment="Center" FontSize="20" Grid.Column="0" Foreground="Black" Text="{Binding}"></TextBlock>
+                                        <TextBlock VerticalAlignment="Stretch" FontSize="15" Grid.Column="0" Foreground="Black" Text="{Binding}" Height="42" TextWrapping="WrapWholeWords" TextAlignment="Left" HorizontalAlignment="Left" />
                                     </Grid>
                                 </Border>
                             </DataTemplate>
                         </ListView.ItemTemplate>
+                        <ListViewItem/>
                     </ListView>
-                    <Button x:ConnectionId='1' x:Name="ButtonFetchLinks" Content="Fetch" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Height="9" RequestedTheme="Light"                               />
+                    <Button x:ConnectionId='3' x:Name="ButtonFetchLinks" Content="Fetch" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Height="9" RequestedTheme="Light"                               />
                 </Grid>
             </PivotItem>
         </Pivot>
+        <Button x:ConnectionId='1' x:Name="Stop" Content="Stop" HorizontalAlignment="Left" Margin="17,562,0,0" VerticalAlignment="Top"                            />
+        <Border BorderBrush="Black" BorderThickness="2,2,2,2" Margin="17,610,17,7">
+            <TextBlock x:Name="StatusLabel" Margin="-1.667,-1.667,-1.833,0.333" TextWrapping="Wrap" VerticalAlignment="Center" Height="38" FontSize="15" TextAlignment="Center"/>
+        </Border>
+        <Button x:ConnectionId='2' x:Name="Random" Content="Random" HorizontalAlignment="Left" Margin="131,562,0,0" VerticalAlignment="Top"                           />
+
     </Grid>
 </Page>
 
