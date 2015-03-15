@@ -1,4 +1,5 @@
 import socket
+import logging
 import sys
 import dummy_thread as _thread
 import os
@@ -6,6 +7,8 @@ import signal
 import pafy
 import random
 import time
+from omxplayer import OMXPlayer
+
 
 def clean_exit(signum, frame):
     print 'Socket closed'
@@ -28,6 +31,17 @@ def is_file_downloaded(strLink):
         if link == strLink:
             return True
     return False
+
+def play_music(strID,conn):
+    try:
+        player.quit()
+    except:
+        print 'Error'
+    global player 
+    player = OMXPlayer('Music/' + strID + '.m4a')
+    player.play()
+    conn.sendall(bytes('Now playing: ' +  dTitleDatabase.get(strID,strID)))
+    return
 	
 
 # Threaded Method
@@ -57,24 +71,26 @@ def download_callback(total, recvd, ratio, rate, eta):
 
 
 def process_message(strMsg,conn):
-    print ("Processing msg", strMsg)
-    if strMsg == "Play" and strPreviousTrack != None:
-        os.system('killall oxmplayer.bin')
-        os.system('omxplayer --no-keys Music/' + strPreviousTrack + '.m4a &')
-        conn.sendall(bytes('Now playing'))
-        return
-    elif strMsg == 'Play' and strPreviousTrack is None:
-        conn.sendall(bytes('No track to play'))
-        return     
+    print "Processing msg ", strMsg
 
     if strMsg == 'Pause':
-        os.system('killall omxplayer.bin')
-        conn.sendall(bytes('Playback stopped'))
+        try:
+            player.pause()
+            conn.sendall(bytes('Playback stopped'))
+        except:
+            print 'Error'
         return
+    
+    if strMsg == 'Play':
+        try:
+            player.play()
+        except:
+            print 'Error'
+        return    
+
    
     if strMsg == 'random':
-        os.system('killall omxplayer.bin')
-        os.system('omxplayer --no-keys Music/' + random.choice(tMusicDatabase) + '.m4a &')
+        play_music(random.choice(tMusicDatabase),conn)
         return
   
     if strMsg == 'GimmeLinks':
@@ -94,21 +110,14 @@ def process_message(strMsg,conn):
         return
 
     if video:
-        os.system('killall omxplayer.bin')
         if is_file_downloaded(video.videoid):    
-            conn.sendall(bytes('File found now playing'))
-            os.system('omxplayer --no-keys Music/' + video.videoid + '.m4a &')
-            strPreviousTrack = video.videoid
+            play_music(video.videoid,conn)
         else:
             audioStream = video.getbestaudio()
             conn.sendall(bytes('File not found ,  now downloading ' + str(audioStream.get_filesize()) + ' bytes'))
-            callbackConnection = conn
             audioStream.download('Music/' + video.videoid + '.m4a',callback = download_callback)
-            callbackConnection = None
-            conn.sendall(bytes('File downloaded , now playing'))
             tMusicDatabase.append(video.videoid)
-            os.system('omxplayer --no-keys Music/' + video.videoid + '.m4a &')
-            strPreviousTrack = video.videoid
+            play_music(video.videoid,conn)
 
 
 
@@ -144,7 +153,7 @@ def build_titledatabase():
     try:
         file = open("Music/TitleDB.txt",'r')
         for line in file:
-            words = line.split('|')
+            words = line.split('||')
             if len(words) == 2:
                 dTitleDatabase[words[0]] = words[1]
     except:
@@ -164,7 +173,7 @@ def build_titledatabase():
     tKeys = dTitleDatabase.keys()
     
     for key in tKeys:
-        file.write(key + '|' + dTitleDatabase[key] + '\n')
+        file.write(key + '||' + dTitleDatabase[key] + '\n')
 
     print len(dTitleDatabase) , ' links in database'
 
@@ -172,10 +181,14 @@ def build_titledatabase():
 
 
 # Cycle
+
+
 socket
 
 tMusicDatabase = []
 dTitleDatabase = {}
+global player
+logging.disable(logging.CRITICAL)
 build_database()
 build_titledatabase()
 strPreviousTrack = None
