@@ -12,6 +12,10 @@ from omxplayer import OMXPlayer
 
 def clean_exit(signum, frame):
     print 'Socket closed'
+    try:
+        player.quit()
+    except:
+        print 'Closed'
     socket.close()
     sys.exit(0)
 
@@ -87,7 +91,28 @@ def process_message(strMsg,conn):
         except:
             print 'Error'
         return    
+    
+    if strMsg == 'Stop':
+        try:
+            player.quit()
+        except:
+            print 'Error'
+        return
 
+    if strMsg == 'VolUP':
+        try:
+            player.action(18)
+        except:
+            print 'Error'
+        return
+
+    if strMsg == 'VolDOWN':
+        try:
+            player.action(17)
+        except:
+            print 'Error'
+        return
+   
    
     if strMsg == 'random':
         play_music(random.choice(tMusicDatabase),conn)
