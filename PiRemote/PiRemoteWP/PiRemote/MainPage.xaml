@@ -36,8 +36,9 @@
                     <CheckBox Content="Playlist" HorizontalAlignment="Left" Margin="17,251,0,0" VerticalAlignment="Top" Foreground="Black" RequestedTheme="Light" Width="84"/>
                 </Grid>
             </PivotItem>
-            <PivotItem Header="Available Music List" Margin="19,23,19,83.667">
+            <PivotItem Header="Available Music List" Margin="19,0,19,83.333">
                 <Grid Margin="0,0,-0.333,51">
+                    
                     <ListView x:Name="LinkList" HorizontalAlignment="Left" Margin="10,63,0,-36" Width="342" BorderBrush="Black" Background="#FFE4E4E4" BorderThickness="1">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
@@ -58,14 +59,29 @@
                         <ListViewItem/>
                     </ListView>
                     <Button x:Name="ButtonFetchLinks" Content="Fetch" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Height="9" RequestedTheme="Light" Click="ButtonFetchLinks_Click"/>
+                    <RadioButton x:Name="OptPlay" Content="Play" HorizontalAlignment="Left" Margin="124,8,0,0" VerticalAlignment="Top" Width="65" GroupName="actionType"/>
+                    <RadioButton x:Name="OptRem" Content="Remove" HorizontalAlignment="Left" Margin="224,8,-30,0" VerticalAlignment="Top" Width="65" GroupName="actionType"/>
+                </Grid>
+            </PivotItem>
+            <PivotItem Header="Controls" Margin="19,0,19,83.333">
+                <Grid>
+                    <Button Content="Pause" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top" Width="228" Click="Button_Click_1"/>
+                    <Button Content="Play" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="228" Click="Button_Click"/>
+                    <Button Content="+" HorizontalAlignment="Left" Margin="243,0,0,0" VerticalAlignment="Top" Click="Button_Click_2"/>
+                    <Button Content="-" HorizontalAlignment="Left" Margin="243,43,0,0" VerticalAlignment="Top" Click="Button_Click_3"/>
                 </Grid>
             </PivotItem>
         </Pivot>
-        <Button x:Name="Stop" Content="Stop" HorizontalAlignment="Left" Margin="17,562,0,0" VerticalAlignment="Top" Tapped="ButtonPause_Tapped"/>
+        <Button x:Name="Stop" Content="Stop" HorizontalAlignment="Left" Margin="17,562,0,0" VerticalAlignment="Top" Tapped="ButtonPause_Tapped" Width="109"/>
         <Border BorderBrush="Black" BorderThickness="2,2,2,2" Margin="17,610,17,7">
             <TextBlock x:Name="StatusLabel" Margin="-1.667,-1.667,-1.833,0.333" TextWrapping="Wrap" VerticalAlignment="Center" Height="38" FontSize="15" TextAlignment="Center"/>
         </Border>
-        <Button x:Name="Random" Content="Random" HorizontalAlignment="Left" Margin="131,562,0,0" VerticalAlignment="Top" Tapped="PickTrackAtRandom"/>
+
+
+
+        <Button x:Name="Random" Content="Random" HorizontalAlignment="Stretch" Margin="131,562,160,0" VerticalAlignment="Top" Tapped="PickTrackAtRandom" Height="34" RenderTransformOrigin="0.5,0.5"/>
+        <Button x:Name="StartRandom" Content="Start Random" HorizontalAlignment="Stretch" Margin="245,562,17,0" VerticalAlignment="Top" Tapped="StartRandoming" Height="34" RenderTransformOrigin="0.5,0.5"/>
+
 
     </Grid>
 </Page>

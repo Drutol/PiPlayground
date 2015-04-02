@@ -26,18 +26,19 @@
                 <Grid HorizontalAlignment="Left" Height="645" Margin="10,10,0,0" VerticalAlignment="Top" Width="380">
 
                     <TextBox x:Name="IPBox" HorizontalAlignment="Left" Margin="10,75,0,0" TextWrapping="Wrap" Text="192.168.1.109" VerticalAlignment="Top" Width="233" TextAlignment="Center" FontSize="24"/>
-                    <Button x:ConnectionId='4' x:Name="ConnectButton" Content="Connect" HorizontalAlignment="Left" Margin="10,109,0,0" VerticalAlignment="Top" Width="233"                             RequestedTheme="Light"/>
-                    <Button x:ConnectionId='5' x:Name="SendStringButton" Content="Send Request" HorizontalAlignment="Left" Margin="126,245,0,0" VerticalAlignment="Top" Width="244"                         RequestedTheme="Light"/>
+                    <Button x:ConnectionId='9' x:Name="ConnectButton" Content="Connect" HorizontalAlignment="Left" Margin="10,109,0,0" VerticalAlignment="Top" Width="233"                             RequestedTheme="Light"/>
+                    <Button x:ConnectionId='10' x:Name="SendStringButton" Content="Send Request" HorizontalAlignment="Left" Margin="126,245,0,0" VerticalAlignment="Top" Width="244"                         RequestedTheme="Light"/>
                     <TextBox x:Name="StringBox" HorizontalAlignment="Left" Margin="10,196,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="358" TextAlignment="Center" RequestedTheme="Light" Height="54" AcceptsReturn="True"/>
                     <TextBlock HorizontalAlignment="Left" Margin="78,162,0,0" TextWrapping="Wrap" Text="YouTube Link" VerticalAlignment="Top" Height="34" Width="225" FontSize="36" TextAlignment="Center" RequestedTheme="Light" Foreground="Black"/>
                     <TextBox x:Name="PortBox" HorizontalAlignment="Left" Margin="248,75,0,0" TextWrapping="Wrap" Text="9875" VerticalAlignment="Top" Width="120" TextAlignment="Center" Height="39" FontSize="24" RenderTransformOrigin="0.206,0.491"/>
 
-                    <Button x:ConnectionId='6' x:Name="Disconnect" Content="Disconnect" HorizontalAlignment="Left" Margin="248,109,0,0" VerticalAlignment="Top" Width="120"                           RequestedTheme="Light"/>
+                    <Button x:ConnectionId='11' x:Name="Disconnect" Content="Disconnect" HorizontalAlignment="Left" Margin="248,109,0,0" VerticalAlignment="Top" Width="120"                           RequestedTheme="Light"/>
                     <CheckBox Content="Playlist" HorizontalAlignment="Left" Margin="17,251,0,0" VerticalAlignment="Top" Foreground="Black" RequestedTheme="Light" Width="84"/>
                 </Grid>
             </PivotItem>
-            <PivotItem Header="Available Music List" Margin="19,23,19,83.667">
+            <PivotItem Header="Available Music List" Margin="19,0,19,83.333">
                 <Grid Margin="0,0,-0.333,51">
+                    
                     <ListView x:Name="LinkList" HorizontalAlignment="Left" Margin="10,63,0,-36" Width="342" BorderBrush="Black" Background="#FFE4E4E4" BorderThickness="1">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
@@ -57,15 +58,30 @@
                         </ListView.ItemTemplate>
                         <ListViewItem/>
                     </ListView>
-                    <Button x:ConnectionId='3' x:Name="ButtonFetchLinks" Content="Fetch" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Height="9" RequestedTheme="Light"                               />
+                    <Button x:ConnectionId='8' x:Name="ButtonFetchLinks" Content="Fetch" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Height="9" RequestedTheme="Light"                               />
+                    <RadioButton x:Name="OptPlay" Content="Play" HorizontalAlignment="Left" Margin="124,8,0,0" VerticalAlignment="Top" Width="65" GroupName="actionType"/>
+                    <RadioButton x:Name="OptRem" Content="Remove" HorizontalAlignment="Left" Margin="224,8,-30,0" VerticalAlignment="Top" Width="65" GroupName="actionType"/>
+                </Grid>
+            </PivotItem>
+            <PivotItem Header="Controls" Margin="19,0,19,83.333">
+                <Grid>
+                    <Button x:ConnectionId='4' Content="Pause" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top" Width="228"                       />
+                    <Button x:ConnectionId='5' Content="Play" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="228"                     />
+                    <Button x:ConnectionId='6' Content="+" HorizontalAlignment="Left" Margin="243,0,0,0" VerticalAlignment="Top"                       />
+                    <Button x:ConnectionId='7' Content="-" HorizontalAlignment="Left" Margin="243,43,0,0" VerticalAlignment="Top"                       />
                 </Grid>
             </PivotItem>
         </Pivot>
-        <Button x:ConnectionId='1' x:Name="Stop" Content="Stop" HorizontalAlignment="Left" Margin="17,562,0,0" VerticalAlignment="Top"                            />
+        <Button x:ConnectionId='1' x:Name="Stop" Content="Stop" HorizontalAlignment="Left" Margin="17,562,0,0" VerticalAlignment="Top"                             Width="109"/>
         <Border BorderBrush="Black" BorderThickness="2,2,2,2" Margin="17,610,17,7">
             <TextBlock x:Name="StatusLabel" Margin="-1.667,-1.667,-1.833,0.333" TextWrapping="Wrap" VerticalAlignment="Center" Height="38" FontSize="15" TextAlignment="Center"/>
         </Border>
-        <Button x:ConnectionId='2' x:Name="Random" Content="Random" HorizontalAlignment="Left" Margin="131,562,0,0" VerticalAlignment="Top"                           />
+
+
+
+        <Button x:ConnectionId='2' x:Name="Random" Content="Random" HorizontalAlignment="Stretch" Margin="131,562,160,0" VerticalAlignment="Top"                            Height="34" RenderTransformOrigin="0.5,0.5"/>
+        <Button x:ConnectionId='3' x:Name="StartRandom" Content="Start Random" HorizontalAlignment="Stretch" Margin="245,562,17,0" VerticalAlignment="Top"                         Height="34" RenderTransformOrigin="0.5,0.5"/>
+
 
     </Grid>
 </Page>

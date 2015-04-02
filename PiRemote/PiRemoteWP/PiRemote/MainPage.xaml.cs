@@ -31,6 +31,8 @@ namespace PiRemote
         StreamSocket clientSocket = new StreamSocket();
         HostName serverHost;
         Dictionary<string, string> MusicDatabase = new Dictionary<string, string>();
+        string PartialLinksString = "";
+        bool receivingLinks = false;
         public MainPage()
         {
             this.InitializeComponent();
@@ -48,6 +50,7 @@ namespace PiRemote
             Stop.IsEnabled = false;
             Random.IsEnabled = false;
             ButtonFetchLinks.IsEnabled = false;
+            OptPlay.IsChecked = true;
         }
 
         private async void EstablishConnection(object sender, RoutedEventArgs e)
@@ -93,20 +96,25 @@ namespace PiRemote
         {
              try
              {
-                IBuffer buffer = new byte[2048].AsBuffer();
-                await clientSocket.InputStream.ReadAsync(buffer, buffer.Capacity, InputStreamOptions.Partial);
-                byte[] result = buffer.ToArray();
-                string strReturn = System.Text.Encoding.UTF8.GetString(result, 0, Convert.ToInt32(buffer.Length));
-                if(!strReturn.Contains("Links"))
-                {
-                    StatusLabel.Text = strReturn;
-                }
-                else
-                {
-                    ProcessLinks(strReturn);
-                }
-
-                readData();
+                 while (true)
+                 {
+                     IBuffer buffer = new byte[2048].AsBuffer();
+                     await clientSocket.InputStream.ReadAsync(buffer, buffer.Capacity, InputStreamOptions.Partial);
+                     byte[] result = buffer.ToArray();
+                     string strReturn = System.Text.Encoding.UTF8.GetString(result, 0, Convert.ToInt32(buffer.Length));
+                     
+                     if (!strReturn.Contains("Links") && !receivingLinks)
+                     {
+                         StatusLabel.Text = strReturn;
+                     }
+                     else if (strReturn.Contains("Links") || receivingLinks)
+                     {
+                         receivingLinks = true;
+                         PartialLinksString += strReturn;
+                         if (strReturn.EndsWith("EOS")) 
+                          ProcessLinks(PartialLinksString);
+                     }
+                 }
              }
             catch (Exception exception)
             {
@@ -136,12 +144,7 @@ namespace PiRemote
 
         private void ButtonPause_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            SendString("Pause");
-        }
-
-        private void ButtonPlay_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            SendString("Play");
+            SendString("Stop");
         }
 
         private void ButtonFetchLinks_Click(object sender, RoutedEventArgs e)
@@ -153,34 +156,66 @@ namespace PiRemote
         {
             LinkList.Items.Clear();
             MusicDatabase.Clear();
+            receivingLinks = false;
+            PartialLinksString = "";
             string[] words = strLinks.Split(';');
             foreach (string word in words)
             {
                 if(!word.Contains("Links"))
                 {
-                    string[] linkData = word.Split('|');
+                    string[] linkData = word.Split('$');
                     if (linkData.Length == 2)
                     {
                         MusicDatabase.Add(linkData[1], linkData[0]);
                         LinkList.Items.Add(linkData[1]);
                     }
-
                 }
             }
-
-
-
         }
 
         void LinkList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            SendString(MusicDatabase[LinkList.SelectedItem.ToString()]);
+            if ((bool)OptPlay.IsChecked)
+            {
+                SendString(MusicDatabase[LinkList.SelectedItem.ToString()]);
+            }
+            else if ((bool)OptRem.IsChecked)
+            {
+                SendString("Rem;" + MusicDatabase[LinkList.SelectedItem.ToString()]);
+            }
+                   
         }
 
         private void PickTrackAtRandom(object sender, TappedRoutedEventArgs e)
         {
             SendString("random");
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            SendString("Play");
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            SendString("Pause");
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            SendString("VolUP");
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            SendString("VolDOWN");
+        }
+
+        private void StartRandoming(object sender, TappedRoutedEventArgs e)
+        {
+            SendString("StartRandom");
+        }
+
    
     }
 }
