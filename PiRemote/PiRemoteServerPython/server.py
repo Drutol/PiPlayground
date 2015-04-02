@@ -2,6 +2,7 @@ import socket
 import logging
 import sys
 import dummy_thread as _thread
+import threading
 import os
 import signal
 import pafy
@@ -44,7 +45,8 @@ def play_music(strID,conn):
     global player 
     player = OMXPlayer('Music/' + strID + '.m4a')
     player.play()
-    conn.sendall(bytes('Now playing: ' +  dTitleDatabase.get(strID,strID)))
+    if conn != 'lol':
+        conn.sendall(bytes('Now playing: ' +  dTitleDatabase.get(strID,strID)))
     return
 	
 
@@ -88,11 +90,14 @@ def process_message(strMsg,conn):
     if strMsg == 'Play':
         try:
             player.play()
+
         except:
             print 'Error'
         return    
     
     if strMsg == 'Stop':
+        global playingRandom
+        playingRandom = False       
         try:
             player.quit()
         except:
@@ -115,6 +120,8 @@ def process_message(strMsg,conn):
    
    
     if strMsg == 'random':
+        global playingRandom
+        playingRandom = False
         play_music(random.choice(tMusicDatabase),conn)
         return
   
@@ -122,11 +129,15 @@ def process_message(strMsg,conn):
         strLinks = 'Links;'
         for link in tMusicDatabase:
             title = dTitleDatabase.get(link,'Title not available ' + link) 
-            strLinks = strLinks + link  + '|' + title + ';'
+            strLinks = strLinks + link  + '$' + title + ';EOS'
         conn.sendall(bytes(strLinks))
         return
-
-
+    if strMsg == 'StartRandom':
+        global playingRandom
+        playingRandom = True
+        check_random()
+        return
+   
     video = None
     try:    
         video = pafy.new(strMsg)
@@ -135,6 +146,8 @@ def process_message(strMsg,conn):
         return
 
     if video:
+        global playingRandom
+        playingRandom = False
         if is_file_downloaded(video.videoid):    
             play_music(video.videoid,conn)
         else:
@@ -144,6 +157,11 @@ def process_message(strMsg,conn):
             tMusicDatabase.append(video.videoid)
             play_music(video.videoid,conn)
 
+
+def check_random():
+    if playingRandom == True:
+        play_music(random.choice(tMusicDatabase),'lol')
+        threading.Timer(int(player.duration()), check_random).start()
 
 
 def start_listening(sock):
@@ -213,6 +231,8 @@ socket
 tMusicDatabase = []
 dTitleDatabase = {}
 global player
+global playingRandom
+playingRandom = False
 logging.disable(logging.CRITICAL)
 build_database()
 build_titledatabase()
@@ -228,3 +248,4 @@ else:
 signal.signal(signal.SIGINT, clean_exit)
 start_listening(socket)
 socket.close()
+
