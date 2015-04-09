@@ -77,7 +77,7 @@ def download_callback(total, recvd, ratio, rate, eta):
 
 
 def process_message(strMsg,conn):
-    print "Processing msg ", strMsg
+    print "Processing msg ", strMsg[3:]
 
     if strMsg == 'Pause':
         try:
@@ -124,12 +124,14 @@ def process_message(strMsg,conn):
         playingRandom = False
         play_music(random.choice(tMusicDatabase),conn)
         return
-  
+    if strMsg == 'StopServer':
+        os.system('sudo halt')  
     if strMsg == 'GimmeLinks':
         strLinks = 'Links;'
         for link in tMusicDatabase:
             title = dTitleDatabase.get(link,'Title not available ' + link) 
-            strLinks = strLinks + link  + '$' + title + ';EOS'
+            strLinks = strLinks + link  + '$' + title + ';'
+        strLinks = strLinks + ';EOS'
         conn.sendall(bytes(strLinks))
         return
     if strMsg == 'StartRandom':
