@@ -162,8 +162,9 @@ def process_message(strMsg,conn):
 
 def check_random():
     if playingRandom == True:
-        play_music(random.choice(tMusicDatabase),'lol')
-        threading.Timer(int(player.duration()), check_random).start()
+        strRandom = random.choice(tMusicDatabase)
+        play_music(strRandom,'lol')
+        threading.Timer(dLengthDatabase.get(strRandom,10), check_random)
 
 
 def start_listening(sock):
@@ -207,7 +208,7 @@ def build_titledatabase():
     for link in tMusicDatabase:
         if dTitleDatabase.get(link) == None:
             print 'Getting title for ' , link
-            vid = pafy.new(link)
+            vid = pafy.new(link,basic = True)
             dTitleDatabase[link] = vid.title
             time.sleep(0.1)
    
@@ -222,6 +223,32 @@ def build_titledatabase():
 
     print len(dTitleDatabase) , ' links in database'
 
+def build_lengthdatabase():
+    file = None
+    try:
+        file = open("Music/LenDB.txt",'r')
+        for line in file:
+            words = line.split('||')
+            if len(words) == 2:
+                dLengthDatabase[words[0]] =int(words[1])
+    except:
+        print 'Error reading file'
+
+    for link in tMusicDatabase:
+        if dLengthDatabase.get(link) == None:
+            print 'Getting length for ' , link
+            vid = pafy.new(link,basic = True)
+            dLengthDatabase[link] = vid.length
+            time.sleep(0.1)
+
+    if file != None:
+        file.close()
+    file = open("Music/LenDB.txt","w")
+
+    tKeys = dLengthDatabase.keys()
+
+    for key in tKeys:
+        file.write(key + '||' + str(dLengthDatabase[key]) + '\n')
 
 
 
@@ -232,12 +259,14 @@ socket
 
 tMusicDatabase = []
 dTitleDatabase = {}
+dLengthDatabase = {}
 global player
 global playingRandom
 playingRandom = False
 logging.disable(logging.CRITICAL)
 build_database()
 build_titledatabase()
+build_lengthdatabase()
 strPreviousTrack = None
 #print 'Len' , len(sys.argv)
 #print 'Arg1' , sys.argv[0]
