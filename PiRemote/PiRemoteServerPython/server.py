@@ -161,10 +161,12 @@ def process_message(strMsg,conn):
 
 
 def check_random():
+    global playingRandom
     if playingRandom == True:
         strRandom = random.choice(tMusicDatabase)
         play_music(strRandom,'lol')
-        threading.Timer(dLengthDatabase.get(strRandom,10), check_random)
+        print dLengthDatabase.get(strRandom,'error')
+        threading.Timer(dLengthDatabase.get(strRandom,10), check_random).start()
 
 
 def start_listening(sock):
