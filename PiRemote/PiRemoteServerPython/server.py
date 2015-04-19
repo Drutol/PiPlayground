@@ -1,3 +1,5 @@
+
+
 import socket
 import logging
 import sys
@@ -162,11 +164,17 @@ def process_message(strMsg,conn):
 
 def check_random():
     global playingRandom
+    global timer
+    try:
+        timer.cancel()
+    except:
+        print 'None timer'
     if playingRandom == True:
         strRandom = random.choice(tMusicDatabase)
         play_music(strRandom,'lol')
         print dLengthDatabase.get(strRandom,'error')
-        threading.Timer(dLengthDatabase.get(strRandom,10), check_random).start()
+        timer = threading.Timer(dLengthDatabase.get(strRandom,10), check_random)
+        timer.start()
 
 
 def start_listening(sock):
@@ -264,19 +272,33 @@ dTitleDatabase = {}
 dLengthDatabase = {}
 global player
 global playingRandom
+global timer
 playingRandom = False
 logging.disable(logging.CRITICAL)
 build_database()
 build_titledatabase()
 build_lengthdatabase()
 strPreviousTrack = None
+
+for link in dTitleDatabase.keys():
+     if is_file_downloaded(link):
+         print 'found'
+     else:
+         print 'downloading' + link
+         video = pafy.new(link)
+         audioStream = video.getbestaudio()
+         audioStream.download('Music/' + video.videoid + '.m4a')
+
+
+
+
 #print 'Len' , len(sys.argv)
 #print 'Arg1' , sys.argv[0]
 #print 'Arg2' , sys.argv[1]
 if len(sys.argv) == 3:
 	socket = setup_socket(sys.argv[1],sys.argv[2])
 else:
-	socket = setup_socket('192.168.1.109',9875)
+	socket = setup_socket(([(s.connect(('8.8.8.8', 80)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]),9875)
 
 signal.signal(signal.SIGINT, clean_exit)
 start_listening(socket)
